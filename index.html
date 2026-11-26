@@ -136,6 +136,7 @@ body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-
 // ปลายทางหลังล็อกอินผ่าน: วางลิงก์หน้าแยกทาง (Portal) ที่ Deploy แล้วตรงนี้
 // ถ้ายังไม่ได้วาง ระบบจะใช้ลิงก์ Google Sites เดิมไปก่อน ทำให้ล็อกอินไม่พังระหว่างติดตั้ง
 // >>> วางลิงก์ /exec ของสคริปต์ Login (ลิงก์ระบบโบรชัวร์เก่าที่ Deploy แล้ว) ตรงนี้ <<<
+try { if (/[?&]logout=1/.test(location.search)) sessionStorage.removeItem("es_auth"); } catch (e) {}
 var API_URL = 'วางลิงก์_exec_ของสคริปต์_Login_ตรงนี้';
 var LOGIN_TIMEOUT_MS = 25000;   // ถ้าเซิร์ฟเวอร์ตอบช้าเกินเวลานี้ ให้แจ้งผู้ใช้และกดลองใหม่ได้
 var PORTAL_URL = 'https://script.google.com/macros/s/AKfycbxGiA3qv2_IOH1xieQwxB3W8OdItqoNeVwQe_aSXJ4d36CvhXJsB8jCD8vNiSl3B0lFOw/exec';
@@ -198,7 +199,8 @@ function login() {
       if (finished) return;
       finished = true; clearTimeout(timer);
       if (res && res.ok) {
-        window.location.href = res.url || destination();
+        try { sessionStorage.setItem("es_auth", "1"); } catch (e) {}
+        window.location.href = "portal.html";
       } else {
         loginBtn.disabled = false;
         document.getElementById("loading").style.display = "none";
